@@ -30,6 +30,12 @@ class SQLiteDataManager(DataManagerInterface):
             movies = Movie.query.filter_by(user_id = user_id).all()
         return movies
 
+    def get_movie_by_id(self, movie_id):
+        # Query to fetch a single movie by movie_id
+        with self.app.app_context():
+            movie = Movie.query.filter_by(movie_id=movie_id).first()  # Fetch the movie by movie_id
+        return movie
+
     def add_user(self, user_name):
         with self.app.app_context():
             new_user = User(
@@ -50,10 +56,21 @@ class SQLiteDataManager(DataManagerInterface):
             db.session.add(new_movie)
             db.session.commit()
 
-    def update_movie(self, user_id, movie_id):
-        pass
+    def update_movie(self, user_id, movie_id,movie_name,movie_director,movie_year,movie_rating):
+        with self.app.app_context():
+            movie = Movie.query.filter(Movie.movie_id == movie_id).first()
+            if movie:
+                movie.movie_name = movie_name
+                movie.movie_director = movie_director
+                movie.movie_year = movie_year
+                movie.movie_rating = movie_rating
+                db.session.commit()
 
     def delete_movie(self, user_id, movie_id):
-        pass
+        with self.app.app_context():
+            movie = Movie.query.filter(Movie.movie_id == movie_id).first()
+            if movie:
+                db.session.delete(movie)
+                db.session.commit()  # Commit the deletion
 
 
