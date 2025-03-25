@@ -15,7 +15,7 @@ class DataManagerInterface(ABC):
         pass
 
     @abstractmethod
-    def add_movie(self, user_id):
+    def add_movie(self,user_id, movie_name, movie_director, movie_year, movie_rating):
         pass
 
     @abstractmethod
