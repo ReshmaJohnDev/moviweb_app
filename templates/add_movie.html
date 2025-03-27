@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Add a Movie to User's List</h2>
+
+    <form method="POST">
+        <label for="movie_name">Movie Name:</label><br>
+        <input type="text" id="movie_name" name="movie_name" required><br><br>
+
+        <button type="submit" class="btn btn-primary">Add Movie</button>
+    </form>
+
+    <br>
+    <a href="{{ url_for('user_movies', user_id=user_id) }}">Back to User's Movies</a>
+{% if movie_poster %}
+        <h3>Movie Details</h3>
+        <div>
+            <p><strong>Poster:</strong></p>
+            <img src="{{ movie_poster }}" alt="Movie Poster" style="width: 200px; height: auto;">
+        </div>
+    {% endif %}
+
+
+    <!-- Display flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+{% endblock %}

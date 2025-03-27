@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - MovieWeb{% endblock %}
+
+{% block content %}
+    <p>Discover your favorite movies and manage users and their movie collections.</p>
+
+
+       <!-- Featured Movies Section -->
+    <div class="container mt-5">
+        <h3>Popular Movies</h3>
+
+        {% if movies %}
+            <div class="row mt-4">
+                {% for movie in movies %}
+                    <div class="col-md-4">
+                        <div class="card movie-card">
+                            <!-- Display the poster dynamically -->
+                            <img src="{{ movie.movie_poster}}" alt="Poster for {{ movie.movie_name }}">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ movie.movie_name }} ({{ movie.movie_year}})</h5>
+                                <p class="card-text">{{ movie.movie_rating }} Rating</p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <img src="{{ url_for('static', filename='image/alt.jpg') }}" alt="Movie Icon">
+        {% endif %}
+    </div>
+{% endblock %}

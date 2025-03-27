@@ -1,3 +1,5 @@
+from sqlalchemy.exc import SQLAlchemyError
+
 from .data_manager_interface import DataManagerInterface
 from .data_models import User, Movie, db
 
@@ -20,51 +22,96 @@ class SQLiteDataManager(DataManagerInterface):
 
     def get_all_users(self):
         # Query to fetch all users
-        with self.app.app_context():
-            users = User.query.all()  # Using ORM query
-        return users
+        try:
+            with self.app.app_context():
+                users = User.query.all()  # Using ORM query
+            return users
+
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            print(f"Data base error: {e}")
+            return []
 
     def get_user_movies(self, user_id):
         # Query to fetch movies for a specific user
-        with self.app.app_context():
-            movies = Movie.query.filter_by(user_id = user_id).all()
-        return movies
+        try:
+            with self.app.app_context():
+                movies = Movie.query.filter_by(user_id = user_id).all()
+            return movies
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            print(f"Data base error to get movies: {e}")
+            return []
 
     def get_movie_by_id(self, movie_id):
         # Query to fetch a single movie by movie_id
-        with self.app.app_context():
-            movie = Movie.query.filter_by(movie_id=movie_id).first()  # Fetch the movie by movie_id
-        return movie
+        try:
+            with self.app.app_context():
+                movie = Movie.query.filter_by(movie_id=movie_id).first()  # Fetch the movie by movie_id
+            return movie
+
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            print(f"Data base error to get movies for {movie_id} : {e}")
+            return []
 
     def add_user(self, user_name):
-        with self.app.app_context():
-            new_user = User(
-                user_name = user_name,
-            )
-            db.session.add(new_user)
-            db.session.commit()
+        try:
+            with self.app.app_context():
+                user = User.query.filter_by(user_name=user_name).first()
+                if user :
+                    return None # User already exists, return the existing user
 
-    def add_movie(self, user_id, movie_name, movie_director, movie_year, movie_rating):
-        with self.app.app_context():
-            new_movie = Movie(
+                new_user = User(user_name = user_name,)
+                db.session.add(new_user)
+                db.session.commit()
+                return new_user # Return the newly created user
+
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            print(f"Data base error to add user: {e}")
+            return None # Return None in case of an error
+
+    def add_movie(self, user_id, movie_name, movie_director, movie_year, movie_rating, movie_poster):
+        try:
+            with self.app.app_context():
+                movie = Movie.query.filter_by(movie_name=movie_name).first()
+                if movie:
+                    return None  # Movie already exists, return the existing user
+
+                new_movie = Movie(
                 movie_name = movie_name,
                 movie_director = movie_director,
                 movie_year = movie_year,
                 movie_rating = movie_rating,
+                movie_poster = movie_poster,
                 user_id = user_id
-            )
-            db.session.add(new_movie)
-            db.session.commit()
+                )
+                db.session.add(new_movie)
+                db.session.commit()
+                return new_movie  # Return the newly added movie
+
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            print(f"Data base error to add user: {e}")
+            return None
 
     def update_movie(self, user_id, movie_id,movie_name,movie_director,movie_year,movie_rating):
-        with self.app.app_context():
-            movie = Movie.query.filter(Movie.movie_id == movie_id).first()
-            if movie:
-                movie.movie_name = movie_name
-                movie.movie_director = movie_director
-                movie.movie_year = movie_year
-                movie.movie_rating = movie_rating
-                db.session.commit()
+        try:
+            with self.app.app_context():
+                movie = Movie.query.filter(Movie.movie_id == movie_id).first()
+                if movie:
+                    movie.movie_name = movie_name
+                    movie.movie_director = movie_director
+                    movie.movie_year = movie_year
+                    movie.movie_rating = movie_rating
+                    db.session.commit()
+                    return movie
+
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            print(f"Data base error to add user: {e}")
+            return None
 
     def delete_movie(self, user_id, movie_id):
         with self.app.app_context():
@@ -72,5 +119,10 @@ class SQLiteDataManager(DataManagerInterface):
             if movie:
                 db.session.delete(movie)
                 db.session.commit()  # Commit the deletion
+
+    def best_movies(self):
+        with self.app.app_context():
+            movies = Movie.query.order_by(Movie.movie_rating.desc()).limit(5).all()
+        return movies
 
 

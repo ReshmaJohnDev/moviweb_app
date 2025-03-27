@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Favourite Movies</h1>
+
+    {% if movies %}
+        <ul class="list-group">
+            {% for movie in movies %}
+                <li class="list-group-item">
+                    <h4>{{ movie.movie_name }} ({{ movie.movie_year }})</h4>
+                    <p>Director: {{ movie.movie_director }}</p>
+                    <p>Rating: {{ movie.movie_rating }}</p>
+                    {% if movie.movie_poster %}
+                        <img src="{{ movie.movie_poster }}" alt="Movie Poster" style="width: 100px; height: auto;">
+                    {% else %}
+                        <p>No poster available</p>
+                    {% endif %}
+                    <br>
+                    <br>
+                    <a href="{{ url_for('update_movie', user_id=user_id, movie_id=movie.movie_id) }}" class="btn btn-warning btn-sm">Update</a>
+                    <a href="{{ url_for('delete_movie', user_id=user_id, movie_id=movie.movie_id) }}" class="btn btn-danger btn-sm">Delete</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No movies found for this user.</p>
+    {% endif %}
+
+    <a href="{{ url_for('add_movie', user_id=user_id) }}" class="btn btn-success">Add Movie</a>
+<a href="{{ url_for('list_users') }}" class="btn btn-success">Back to User List</a>
+{% endblock %}
+
+{% block styles %}
+    <style>
+        body {
+            background: linear-gradient(to right, #ff7e5f, #feb47b);
+            height: 100vh;
+            color: white;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .list-group-item {
+            background-color: rgba(0, 0, 0, 0.5); /* Slightly transparent dark background for list items */
+            color: white;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+
+        .btn {
+            margin-top: 5px;
+        }
+    </style>
+{% endblock %}

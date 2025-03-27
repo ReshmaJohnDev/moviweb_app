@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}MovieWeb App{% endblock %}</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(45deg, #0081b9, #65b6d1);
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Wrapper ensures the content expands properly without overflow */
+        .content-wrapper {
+            min-height: 100vh; /* Ensures content expands to full height */
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            padding-top: 80px; /* Ensures content is not hidden behind navbar */
+        }
+
+        .navbar-custom {
+            background-color: #343a40;
+        }
+
+        .footer {
+            margin-top: auto; /* Pushes footer to the bottom */
+            padding: 20px 0;
+            text-align: center;
+            background-color: #343a40;
+            color: white;
+        }
+
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+    <div class="container">
+        <!-- Navigation Bar -->
+        <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
+            <div class="container-fluid">
+                <!-- Logo and Brand -->
+                <a class="navbar-brand" href="{{ url_for('home_page') }}">
+                    <img src="{{ url_for('static', filename='image/alt.jpg') }}"
+                         alt="Logo"
+                         width="40" height="40"
+                         class="d-inline-block align-text-top rounded-circle">
+                    MovieWeb
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('home_page') }}">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('add_user') }}">Add User</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('list_users') }}">View Users</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="container mt-3">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ 'success' if category == 'success' else 'danger' }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <!-- Main Content Block -->
+        <main>
+            {% block content %}
+            <!-- Child templates will inject their content here -->
+            {% endblock %}
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2025 MovieWeb App. All rights reserved.</p>
+        </footer>
+    </div>
+
+</body>
+</html>

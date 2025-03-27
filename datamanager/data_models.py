@@ -1,3 +1,5 @@
+from enum import unique
+
 from flask_sqlalchemy import SQLAlchemy
 
 # Initialize the SQLAlchemy object
@@ -24,10 +26,11 @@ class Movie(db.Model):
     """
     __tablename__ = 'movies'
     movie_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    movie_name = db.Column(db.String)
+    movie_name = db.Column(db.String,unique=True)
     movie_director = db.Column(db.String)
     movie_year = db.Column(db.Integer)
     movie_rating = db.Column(db.Float)
+    movie_poster = db.Column(db.String)
 
     # Foreign key to associate the movie with a user
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)

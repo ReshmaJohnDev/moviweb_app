@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Update Movie Details</h2>
+    <form method="POST">
+        <label for="movie_name">Movie Name:</label><br>
+        <input type="text" id="movie_name" name="movie_name" value="{{ movie.movie_name }}" required><br><br>
+
+        <label for="movie_director">Director:</label><br>
+        <input type="text" id="movie_director" name="movie_director" value="{{ movie.movie_director }}" required><br><br>
+
+        <label for="movie_year">Year:</label><br>
+        <input type="text" id="movie_year" name="movie_year" value="{{ movie.movie_year }}" required><br><br>
+
+        <label for="movie_rating">Rating:</label><br>
+        <input type="text" id="movie_rating" name="movie_rating" value="{{ movie.movie_rating }}" required><br><br>
+
+        <button type="submit" class="btn btn-primary">Update Movie</button>
+    </form>
+
+    <br>
+    <a href="{{ url_for('user_movies', user_id=user_id) }}">Back to User's Movies</a>
+{% endblock %}

@@ -19,7 +19,7 @@ class DataManagerInterface(ABC):
         pass
 
     @abstractmethod
-    def add_movie(self,user_id, movie_name, movie_director, movie_year, movie_rating):
+    def add_movie(self,user_id, movie_name, movie_director, movie_year, movie_rating,movie_poster):
         pass
 
     @abstractmethod
@@ -28,4 +28,8 @@ class DataManagerInterface(ABC):
 
     @abstractmethod
     def delete_movie(self, user_id, movie_id):
+        pass
+
+    @abstractmethod
+    def best_movies(self):
         pass

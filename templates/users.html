@@ -1,0 +1,47 @@
+    {% extends 'base.html' %}
+
+    {% block content %}
+
+        <h1>Users</h1>
+                {% if error %}
+            <div style="color: red; font-weight: bold;">
+                {{ error }}
+            </div>
+        {% endif %}
+    {% if success_message %}
+            <div style="color: green; font-weight: bold;">
+                {{ success_message }}
+            </div>
+        {% endif %}
+
+       <div class="row">
+           {% for user in users %}
+            <div class="col-md-4 mb-4">
+                <!-- Card structure for each user -->
+                 <div class="card animated-card" style="width: 18rem; background-color: #B0E0E6; color: #333;">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ user.user_name }}</h5>
+                        <p class="card-text">Click below to view their movies</p>
+                        <a href="{{ url_for('user_movies', user_id=user.user_id) }}" class="btn btn-primary">View Movies</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <a href="{{ url_for('home_page') }}">Back to Home</a>
+    <style>
+
+        .container {
+            overflow: hidden;
+        }
+
+        .animated-card {
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .animated-card:hover {
+            transform: scale(1.1) translateY(-10px);
+            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+    {% endblock %}
