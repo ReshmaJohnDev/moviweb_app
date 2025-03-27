@@ -1,10 +1,9 @@
 from sqlalchemy.exc import SQLAlchemyError
-
 from .data_manager_interface import DataManagerInterface
 from .data_models import User, Movie, db
 
-
 class SQLiteDataManager(DataManagerInterface):
+    """The SQLiteDataManager is the  implementation of the DataManagerInterface"""
     def __init__(self, app, db_file_name):
         self.app = app
         self.db_file_name = db_file_name
@@ -21,7 +20,9 @@ class SQLiteDataManager(DataManagerInterface):
             db.create_all()
 
     def get_all_users(self):
-        # Query to fetch all users
+        """
+        Query to fetch all users
+        """
         try:
             with self.app.app_context():
                 users = User.query.all()  # Using ORM query
@@ -33,7 +34,9 @@ class SQLiteDataManager(DataManagerInterface):
             return []
 
     def get_user_movies(self, user_id):
-        # Query to fetch movies for a specific user
+        """
+        Query to fetch movies for a specific user
+        """
         try:
             with self.app.app_context():
                 movies = Movie.query.filter_by(user_id = user_id).all()
@@ -44,10 +47,13 @@ class SQLiteDataManager(DataManagerInterface):
             return []
 
     def get_movie_by_id(self, movie_id):
-        # Query to fetch a single movie by movie_id
+        """
+        Query to fetch a single movie by movie_id
+        """
         try:
             with self.app.app_context():
-                movie = Movie.query.filter_by(movie_id=movie_id).first()  # Fetch the movie by movie_id
+                # Fetch the movie by movie_id
+                movie = Movie.query.filter_by(movie_id = movie_id).first()
             return movie
 
         except SQLAlchemyError as e:
@@ -56,9 +62,12 @@ class SQLiteDataManager(DataManagerInterface):
             return []
 
     def add_user(self, user_name):
+        """
+        Query to check if user already exist and also to add user .
+        """
         try:
             with self.app.app_context():
-                user = User.query.filter_by(user_name=user_name).first()
+                user = User.query.filter_by(user_name = user_name).first()
                 if user :
                     return None # User already exists, return the existing user
 
@@ -72,10 +81,15 @@ class SQLiteDataManager(DataManagerInterface):
             print(f"Data base error to add user: {e}")
             return None # Return None in case of an error
 
-    def add_movie(self, user_id, movie_name, movie_director, movie_year, movie_rating, movie_poster):
+    def add_movie(self, user_id, movie_name, movie_director,
+                  movie_year, movie_rating, movie_poster):
+        """
+        Query to check if movie already exist . if not ,
+        then add new movie details to the db.
+        """
         try:
             with self.app.app_context():
-                movie = Movie.query.filter_by(movie_name=movie_name).first()
+                movie = Movie.query.filter_by(movie_name = movie_name).first()
                 if movie:
                     return None  # Movie already exists, return the existing user
 
@@ -96,7 +110,11 @@ class SQLiteDataManager(DataManagerInterface):
             print(f"Data base error to add user: {e}")
             return None
 
-    def update_movie(self, user_id, movie_id,movie_name,movie_director,movie_year,movie_rating):
+    def update_movie(self, user_id, movie_id,movie_name,
+                     movie_director,movie_year,movie_rating):
+        """
+        Query to update the movie details into the db
+        """
         try:
             with self.app.app_context():
                 movie = Movie.query.filter(Movie.movie_id == movie_id).first()
@@ -114,6 +132,9 @@ class SQLiteDataManager(DataManagerInterface):
             return None
 
     def delete_movie(self, user_id, movie_id):
+        """
+        Query to delete a movie from the database.
+        """
         with self.app.app_context():
             movie = Movie.query.filter(Movie.movie_id == movie_id).first()
             if movie:
@@ -121,8 +142,9 @@ class SQLiteDataManager(DataManagerInterface):
                 db.session.commit()  # Commit the deletion
 
     def best_movies(self):
+        """
+        Query to choose the best movie based on the rating from the database.
+        """
         with self.app.app_context():
             movies = Movie.query.order_by(Movie.movie_rating.desc()).limit(5).all()
         return movies
-
-
