@@ -28,7 +28,7 @@ Requests
 dotenv
 
 Setup
-git clone https://github.com/yourusername/movieweb-app.git
+git clone https://github.com/ReshmaJohnDev/moviweb_app.git
 cd movieweb-app
 
 Install the necessary dependencies:
