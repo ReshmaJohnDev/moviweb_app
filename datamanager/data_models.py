@@ -7,11 +7,13 @@ db = SQLAlchemy()
 
 class User(db.Model):
     """
-    Represents an User in the database.
+    Represents a User in the database.
     """
     __tablename__ = 'users'
     user_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_name = db.Column(db.String, unique=True)
+
+    movies = db.relationship('Movie', back_populates='user', lazy=True)
 
     def __repr__(self):
         """
@@ -34,7 +36,8 @@ class Movie(db.Model):
 
     # Foreign key to associate the movie with a user
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
-    user = db.relationship('User', backref='movies', lazy=True)
+    # Define the relationship explicitly with back_populates
+    user = db.relationship('User', back_populates='movies', lazy=True)
 
     def __repr__(self):
         """
