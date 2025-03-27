@@ -82,7 +82,8 @@ def add_movie(user_id):
         movie_url = f"{URL}{movie_name}"
 
         # Fetch movie details from OMDb API
-        response = requests.get(movie_url)
+        response = requests.get(movie_url, timeout=10)  # Set a timeout
+        response.raise_for_status()
         movie_data = response.json()
 
         try:
@@ -113,9 +114,12 @@ def add_movie(user_id):
                 return redirect(url_for('user_movies', user_id = user_id))
             else:
                 flash('Movie not found or invalid data!', 'error')
+
         except requests.exceptions.HTTPError as http_err:
             print(f"HTTP error occurred: {http_err}")
 
+        except requests.exceptions.Timeout:
+            flash("The request to OMDb API timed out. Please try again later.", "error")
         except requests.exceptions.RequestException as req_err:
             print(f"Error occurred while making the request: {req_err}")
 
