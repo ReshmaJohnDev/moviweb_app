@@ -119,7 +119,8 @@ def add_movie(user_id):
             print(f"HTTP error occurred: {http_err}")
 
         except requests.exceptions.Timeout:
-            flash("The request to OMDb API timed out. Please try again later.", "error")
+            flash("The request to OMDb API timed out."
+                  " Please try again later.", "error")
         except requests.exceptions.RequestException as req_err:
             print(f"Error occurred while making the request: {req_err}")
 
