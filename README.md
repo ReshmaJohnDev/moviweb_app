@@ -1,18 +1,18 @@
 MovieWeb App
-MovieWeb App is a Flask-based web application that allows users to manage their movie collections.
-It includes functionalities such as adding, updating, and deleting movies, as well as viewing popular movies and their details.
-The app uses SQLite as a backend database to store user and movie.
+- MovieWeb App is a Flask-based web application that allows users to manage their movie collections.
+- It includes functionalities such as adding, updating, and deleting movies, as well as viewing popular movies and their details.
+- The app uses SQLite as a backend database to store user and movie.
 
-Features
-User Management:
-Add new users.
-View list of users.
-View each user's movie collection.
+- Features
+- User Management:
+- Add new users.
+- View list of users.
+- View each user's movie collection.
 
-Movie Management:
-Add movies to a user's collection.
-Update movie details (title, director, year, rating).
-Delete movies from a user's collection.
+- Movie Management:
+- Add movies to a user's collection.
+- Update movie details (title, director, year, rating).
+- Delete movies from a user's collection.
 
 Top-rated Movies:
 Display the top 5 rated movies based on IMDb ratings.
